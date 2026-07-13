@@ -1,21 +1,27 @@
 backend:
   name: github
   repo: mertm01/freelance-portfolyo
-  branch: main # veya master
+  branch: main 
   base_url: https://cms-koprusu.mertmustafaissever.workers.dev
 
-
-media_folder: "images" # Yüklenen resimlerin kaydedileceği klasör
+media_folder: "images" 
 public_folder: "/images"
 
 collections:
-  - name: "projeler"
-    label: "Projeler / Son İşlerim"
-    folder: "content/projeler" # İçeriklerin kaydedileceği klasör
-    create: true
-    slug: "{{year}}-{{month}}-{{slug}}"
-    fields:
-      - {label: "Proje Adı", name: "title", widget: "string"}
-      - {label: "Kategori (Örn: Web Geliştirme)", name: "category", widget: "string"}
-      - {label: "Kullanılan Teknolojiler (Virgülle ayırın)", name: "tech", widget: "string"}
-      - {label: "Proje Görseli", name: "image", widget: "image"}
+  - name: "icerik"
+    label: "İçerik Yönetimi"
+    files:
+      - label: "Projeler / Son İşlerim"
+        name: "projeler"
+        file: "projeler.json"
+        extension: "json"
+        format: "json"
+        fields:
+          - label: "Eklenen Projeler Listesi"
+            name: "list"
+            widget: "list"
+            fields:
+              - {label: "Proje Adı", name: "title", widget: "string"}
+              - {label: "Kategori", name: "category", widget: "string"}
+              - {label: "Kullanılan Teknolojiler (Virgülle ayırın, örn: HTML, CSS, React)", name: "tech", widget: "string"}
+              - {label: "Proje Görseli", name: "image", widget: "image"}
