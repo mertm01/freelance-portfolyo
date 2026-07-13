@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mert | Profesyonel Web & Kreatif Çözümler</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        body {
+            background-color: #0f172a;
+            background-image: radial-gradient(#1e293b 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: #f8fafc;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            cursor: none; 
+        }
+        
+        /* Özel Fare İmleci */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background-color: #2dd4bf;
+        }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 2px solid rgba(45, 212, 191, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        .cursor-hover {
+            width: 70px; height: 70px;
+            background-color: rgba(45, 212, 191, 0.1);
+            border-color: #2dd4bf;
+        }
+
+        /* Dokunmatik ekranlarda (Mobil) özel imleci gizle ve normal tıklamayı aç */
+        @media (hover: none) and (pointer: coarse) {
+            .cursor-dot, .cursor-outline {
+                display: none !important;
+            }
+            body {
+                cursor: auto !important;
+            }
+        }
+
+        /* Neon Efektleri */
+        .glowing-text {
+            text-shadow: 0 0 25px rgba(45, 212, 191, 0.6);
+        }
+        .glowing-box {
+            transition: all 0.4s ease;
+        }
+        .glowing-box:hover {
+            box-shadow: 0 0 40px rgba(45, 212, 191, 0.2);
+            transform: translateY(-5px);
+            border-color: rgba(45, 212, 191, 0.4);
+        }
+        
+        /* Gelişmiş Parçacık Animasyonu */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float-up linear infinite;
+            z-index: 0;
+            pointer-events: none;
+            filter: blur(2px);
+        }
+        @keyframes float-up {
+            0% { transform: translateY(110vh) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            50% { transform: translateY(50vh) translateX(30px) scale(1.2); opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-20vh) translateX(-30px) scale(1.5); opacity: 0; }
+        }
+
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(to right, #2dd4bf, #a855f7, #ec4899);
+            width: 0%;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-teal-400 selection:text-slate-900">
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <div id="scroll-progress"></div>
+    
+    <!-- Zenginleştirilmiş Parçacık Konteyneri -->
+    <div id="particles-container" class="fixed inset-0 overflow-hidden pointer-events-none z-0"></div>
+
+    <!-- HERO SECTION -->
+    <header class="min-h-[90vh] md:min-h-screen flex flex-col justify-center items-center relative overflow-hidden px-4 pt-10">
+        <div class="absolute top-1/4 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-teal-500 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px] opacity-20 animate-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-[80px] md:blur-[120px] opacity-20 animate-pulse" style="animation-delay: 2s;"></div>
+
+        <div class="z-10 text-center max-w-5xl hero-content relative mt-10 md:mt-20">
+            <h2 class="text-teal-400 tracking-[0.2em] md:tracking-[0.4em] uppercase text-xs md:text-sm mb-4 font-bold">Freelance Geliştirici & Tasarımcı</h2>
+            <h1 class="text-6xl md:text-9xl font-extrabold mb-6 md:mb-8 glowing-text tracking-tighter">Mert.</h1>
+            
+            <p class="text-lg md:text-3xl text-slate-300 mb-10 md:mb-12 font-light leading-relaxed max-w-4xl mx-auto px-4">
+                Markanızı dijitalde bir adım öteye taşıyan, <br class="hidden md:block"/>
+                <span class="text-teal-400 font-semibold border-b border-teal-400/50 pb-1">hızlı, modern</span> ve <span class="text-purple-400 font-semibold border-b border-purple-400/50 pb-1">sonuç odaklı</span> web çözümleri tasarlıyorum.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center px-4 w-full sm:w-auto">
+                <a href="#hakkimda" class="hoverable w-full sm:w-auto px-8 py-4 bg-teal-400 text-slate-900 font-bold rounded-full hover:bg-teal-300 transition-all transform hover:scale-105 hover:shadow-[0_0_30px_rgba(45,212,191,0.5)] duration-300 text-center">
+                    Beni Tanı
+                </a>
+                <a href="https://www.bionluk.com/mertissever" target="_blank" class="hoverable w-full sm:w-auto px-8 py-4 border-2 border-teal-400 text-teal-400 font-bold rounded-full hover:bg-teal-400/10 transition-all hover:shadow-[0_0_20px_rgba(45,212,191,0.2)] text-center">
+                    Bana Ulaş
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-6 md:bottom-10 animate-bounce z-10 hidden md:block">
+            <svg class="w-8 h-8 text-teal-400 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
+    </header>
+
+    <!-- HAKKINDA SECTION -->
+    <section id="hakkimda" class="py-16 md:py-24 px-4 md:px-12 max-w-6xl mx-auto relative z-10">
+        <div class="hakkimda-kutu bg-slate-800/40 border border-slate-700/50 backdrop-blur-xl p-8 md:p-16 rounded-[2rem] md:rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/20 rounded-full blur-[50px]"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-teal-500/20 rounded-full blur-[50px]"></div>
+            
+            <div class="relative z-10 flex flex-col md:flex-row gap-8 md:gap-12 items-center text-center md:text-left">
+                <div class="md:w-1/3 flex flex-col items-center md:items-start">
+                    <h2 class="text-3xl md:text-5xl font-bold text-white mb-2">Ben Kimim?</h2>
+                    <div class="w-20 h-2 bg-teal-400 rounded-full mb-4 md:mb-6"></div>
+                </div>
+                <div class="md:w-2/3">
+                    <p class="text-base md:text-xl text-slate-300 leading-relaxed font-light">
+                        Yıllardır bir çok platformda bulundum. İnternetin ve sanal alemin yaratıcılık gerektiren bir çok işini deneyimledim. <strong class="text-white font-semibold">YouTube, Instagram</strong> gibi platformlarda içerikler ürettim. 
+                        <br><br>
+                        Bir çok web sitesi tasarladım, bir çok video editledim, photoshop yaptım. Şu sıralarda ise tek başıma oyun yapmakta ve freelancer olarak dijital projelere hayat vermekteyim.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HİZMETLER SECTION -->
+    <section class="py-16 md:py-24 px-4 md:px-12 max-w-7xl mx-auto relative z-10" id="hizmetler">
+        <h2 class="text-3xl md:text-5xl font-bold mb-12 md:mb-20 text-center section-title tracking-tight">Neler Yapıyorum?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div class="service-box glowing-box p-8 md:p-10 bg-slate-800/60 rounded-3xl border border-slate-700/50 backdrop-blur-md opacity-0">
+                <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-teal-400/20 to-teal-400/5 rounded-2xl flex items-center justify-center mb-6 md:mb-8 border border-teal-400/20">
+                    <span class="text-2xl md:text-3xl">⚡</span>
+                </div>
+                <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">Ultra Hızlı Siteler</h3>
+                <p class="text-sm md:text-base text-slate-400 leading-relaxed">Statik site mimarisi ve modern altyapılar ile saniyenin altında yüklenen, arama motorlarında üst sıralara çıkan güvenli web siteleri.</p>
+            </div>
+            
+            <div class="service-box glowing-box p-8 md:p-10 bg-slate-800/60 rounded-3xl border border-slate-700/50 backdrop-blur-md opacity-0">
+                <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-purple-400/20 to-purple-400/5 rounded-2xl flex items-center justify-center mb-6 md:mb-8 border border-purple-400/20">
+                    <span class="text-2xl md:text-3xl">📱</span>
+                </div>
+                <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">Modern Paneller</h3>
+                <p class="text-sm md:text-base text-slate-400 leading-relaxed">İçeriklerinizi kolayca yönetebileceğiniz, kod karmaşasından uzak, tamamen size özel tasarlanmış yönetim panelleri.</p>
+            </div>
+
+            <div class="service-box glowing-box p-8 md:p-10 bg-slate-800/60 rounded-3xl border border-slate-700/50 backdrop-blur-md opacity-0">
+                <div class="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-pink-400/20 to-pink-400/5 rounded-2xl flex items-center justify-center mb-6 md:mb-8 border border-pink-400/20">
+                    <span class="text-2xl md:text-3xl">🎨</span>
+                </div>
+                <h3 class="text-xl md:text-2xl font-bold mb-3 md:mb-4">Kreatif Medya</h3>
+                <p class="text-sm md:text-base text-slate-400 leading-relaxed">Sadece kodlama değil; markanız için video kurgu, sosyal medya içerikleri ve görsel tasarım süreçlerinde tam destek.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJELER SECTION -->
+    <section id="projeler" class="py-16 md:py-32 px-4 md:px-16 bg-slate-900/80 backdrop-blur-lg max-w-7xl mx-auto rounded-3xl md:rounded-[3rem] mb-16 md:mb-24 border border-slate-800 relative z-10 shadow-2xl">
+        <div class="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 section-title text-center md:text-left gap-4">
+            <div>
+                <h2 class="text-3xl md:text-5xl font-bold mb-4 tracking-tight">Son İşlerim</h2>
+                <p class="text-sm md:text-lg text-slate-400">Bu projeler <span class="text-teal-400 font-mono bg-teal-400/10 px-2 py-1 rounded-md border border-teal-400/20">Headless API</span> üzerinden canlı olarak çekiliyor.</p>
+            </div>
+        </div>
+
+        <div id="cms-projects-container" class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+            <div class="col-span-full text-center py-10 md:py-20 text-teal-400 font-mono flex flex-col items-center justify-center gap-4 md:gap-6">
+                <svg class="w-10 h-10 md:w-12 md:h-12 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-20" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-80" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span class="tracking-widest animate-pulse text-sm md:text-base">SİSTEM VERİLERİ ÇEKİLİYOR...</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- YENİ EKLENEN: FOOTER (SOSYAL MEDYA VE BİONLUK) -->
+    <footer class="border-t border-slate-800 bg-slate-900/60 backdrop-blur-xl relative z-10 py-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
+            
+            <div class="text-center md:text-left">
+                <h4 class="text-2xl font-extrabold text-white mb-2 glowing-text tracking-tighter">Mert.</h4>
+                <p class="text-slate-500 font-light text-sm">Dijital dünyadaki profesyonel çözüm ortağınız.</p>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <!-- Bionluk Butonu -->
+                <a href="https://www.bionluk.com/mertissever" target="_blank" class="hoverable group w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center hover:bg-teal-400/10 hover:border-teal-400 hover:shadow-[0_0_20px_rgba(45,212,191,0.3)] transition-all duration-300">
+                    <span class="font-black text-xl text-slate-400 group-hover:text-teal-400 transition-colors">B</span>
+                </a>
+                
+                <!-- Instagram Butonu -->
+                <a href="#" class="hoverable group w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center hover:bg-pink-500/10 hover:border-pink-500 hover:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all duration-300">
+                    <svg class="w-6 h-6 text-slate-400 group-hover:text-pink-500 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                    </svg>
+                </a>
+
+                <!-- Facebook Butonu -->
+                <a href="#" class="hoverable group w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center hover:bg-blue-500/10 hover:border-blue-500 hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300">
+                    <svg class="w-6 h-6 text-slate-400 group-hover:text-blue-500 transition-colors" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+    </footer>
+
+    <script>
+        // İMLEÇ VE KAYDIRMA KODLARI
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        
+        window.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = `${e.clientX}px`;
+            cursorDot.style.top = `${e.clientY}px`;
+            cursorOutline.animate({ left: `${e.clientX}px`, top: `${e.clientY}px` }, { duration: 500, fill: "forwards" });
+        });
+
+        document.querySelectorAll('a, button, .hoverable').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOutline.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => cursorOutline.classList.remove('cursor-hover'));
+        });
+
+        window.addEventListener('scroll', () => {
+            const scrollTotal = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById('scroll-progress').style.width = ((scrollTotal / height) * 100) + "%";
+        });
+
+        // GELİŞMİŞ ARKA PLAN PARÇACIKLARI
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            const particleCount = 50;
+            const colors = [
+                'rgba(45, 212, 191, 0.4)', 
+                'rgba(168, 85, 247, 0.4)', 
+                'rgba(236, 72, 153, 0.3)'  
+            ];
+            
+            // Mobilde daha az parçacık göstererek performansı artır
+            const isMobile = window.innerWidth < 768;
+            const finalCount = isMobile ? 20 : particleCount;
+
+            for (let i = 0; i < finalCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 25 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}vw`;
+                
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = randomColor;
+                particle.style.boxShadow = `0 0 ${size}px ${randomColor}`;
+                
+                particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
+                particle.style.animationDelay = `${Math.random() * 15}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // GSAP ANİMASYONLARI
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.from(".hero-content > *", {
+            y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: "power4.out", delay: 0.3
+        });
+
+        gsap.from(".hakkimda-kutu", {
+            scrollTrigger: { trigger: "#hakkimda", start: "top 80%" },
+            y: 50, opacity: 0, duration: 1, ease: "power3.out"
+        });
+
+        gsap.utils.toArray('.service-box').forEach((box, i) => {
+            gsap.fromTo(box, 
+                { y: 80, opacity: 0 },
+                { 
+                    scrollTrigger: {
+                        trigger: box,
+                        start: "top 85%"
+                    },
+                    y: 0, opacity: 1, duration: 0.8, ease: "back.out(1.5)", delay: i * 0.15
+                }
+            );
+        });
+
+        gsap.from(".section-title", {
+            scrollTrigger: { trigger: "#projeler", start: "top 85%" },
+            x: -40, opacity: 0, duration: 1, ease: "power3.out"
+        });
+
+        // API / HEADLESS CMS SİMÜLASYONU
+        async function fetchProjectsFromCMS() {
+            const container = document.getElementById('cms-projects-container');
+            await new Promise(resolve => setTimeout(resolve, 2000)); 
+
+            const cmsData = [
+                {
+                    title: "Anaokulu Kurumsal Platformu",
+                    category: "Web Geliştirme",
+                    image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=800&q=80",
+                    tech: ["HTML5", "Cloudflare", "Tailwind"]
+                },
+                {
+                    title: "Modern Portfolyo Sitesi",
+                    category: "Kreatif Tasarım",
+                    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80",
+                    tech: ["GSAP", "API", "Netlify"]
+                }
+            ];
+
+            container.innerHTML = '';
+
+            cmsData.forEach((project) => {
+                const techBadges = project.tech.map(t => `<span class="px-3 py-1 bg-slate-900/80 rounded-lg text-xs md:text-sm text-teal-400 font-mono border border-teal-400/20">${t}</span>`).join('');
+                
+                const html = `
+                    <div class="glowing-box bg-slate-800/80 rounded-3xl overflow-hidden border border-slate-700/50 group hoverable cursor-pointer cms-item" style="opacity: 0; transform: translateY(30px);">
+                        <div class="h-56 md:h-72 overflow-hidden relative">
+                            <div class="absolute inset-0 bg-teal-400/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                            <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out">
+                        </div>
+                        <div class="p-8 md:p-10 relative">
+                            <p class="text-teal-400 text-xs font-bold tracking-[0.2em] uppercase mb-2 md:mb-3">${project.category}</p>
+                            <h3 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-white group-hover:text-teal-300 transition-colors">${project.title}</h3>
+                            <div class="flex gap-2 md:gap-3 flex-wrap">
+                                ${techBadges}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+
+            gsap.to(".cms-item", {
+                opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out"
+            });
+        }
+
+        window.addEventListener('load', fetchProjectsFromCMS);
+    </script>
+</body>
+</html>
