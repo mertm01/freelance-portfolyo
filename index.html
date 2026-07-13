@@ -322,25 +322,61 @@
             x: -40, opacity: 0, duration: 1, ease: "power3.out"
         });
 
-        // API / HEADLESS CMS SİMÜLASYONU
+      // 5. GERÇEK API / HEADLESS CMS BAĞLANTISI
         async function fetchProjectsFromCMS() {
             const container = document.getElementById('cms-projects-container');
-            await new Promise(resolve => setTimeout(resolve, 2000)); 
-
-            const cmsData = [
-                {
-                    title: "Anaokulu Kurumsal Platformu",
-                    category: "Web Geliştirme",
-                    image: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=800&q=80",
-                    tech: ["HTML5", "Cloudflare", "Tailwind"]
-                },
-                {
-                    title: "Modern Portfolyo Sitesi",
-                    category: "Kreatif Tasarım",
-                    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80",
-                    tech: ["GSAP", "API", "Netlify"]
+            
+            try {
+                // Sitenin kök dizinine kaydettiğimiz JSON dosyasını çekiyoruz
+                const response = await fetch('/projeler.json');
+                
+                if (!response.ok) {
+                    throw new Error("Veri bulunamadı");
                 }
-            ];
+
+                const data = await response.json();
+                const cmsData = data.list || []; // Listeyi al
+
+                container.innerHTML = ''; // Yükleniyor animasyonunu sil
+
+                if(cmsData.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center text-slate-500 font-light mt-10">Henüz yayınlanmış bir proje bulunmuyor.</div>';
+                    return;
+                }
+
+                cmsData.forEach((project) => {
+                    // Virgülle girilen teknolojileri şık kutucuklara ayır
+                    const techArray = project.tech ? project.tech.split(',').map(item => item.trim()) : [];
+                    const techBadges = techArray.map(t => `<span class="px-3 py-1 bg-slate-900/80 rounded-lg text-xs md:text-sm text-teal-400 font-mono border border-teal-400/20">${t}</span>`).join('');
+                    
+                    const html = `
+                        <div class="glowing-box bg-slate-800/80 rounded-3xl overflow-hidden border border-slate-700/50 group hoverable cursor-pointer cms-item" style="opacity: 0; transform: translateY(30px);">
+                            <div class="h-56 md:h-72 overflow-hidden relative">
+                                <div class="absolute inset-0 bg-teal-400/20 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                                <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out">
+                            </div>
+                            <div class="p-8 md:p-10 relative">
+                                <p class="text-teal-400 text-xs font-bold tracking-[0.2em] uppercase mb-2 md:mb-3">${project.category}</p>
+                                <h3 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-white group-hover:text-teal-300 transition-colors">${project.title}</h3>
+                                <div class="flex gap-2 md:gap-3 flex-wrap">
+                                    ${techBadges}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += html;
+                });
+
+                // Projeler ekrana basıldıktan sonra havalı giriş animasyonunu çalıştır
+                gsap.to(".cms-item", {
+                    opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: "power3.out"
+                });
+
+            } catch (error) {
+                // Eğer henüz JSON dosyası yoksa veya boşsa gösterilecek mesaj
+                container.innerHTML = `<div class="col-span-full text-center text-slate-400 text-lg">Yönetim panelinden ilk projenizi eklediğinizde burada görünecektir.</div>`;
+            }
+        }
 
             container.innerHTML = '';
 
