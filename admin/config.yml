@@ -2,7 +2,7 @@ backend:
   name: github
   repo: mertm01/freelance-portfolyo
   branch: main # veya master
-  base_url: cms-koprusu.mertmustafaissever.workers.dev
+  base_url: https://cms-koprusu.mertmustafaissever.workers.dev
 
 
 media_folder: "images" # Yüklenen resimlerin kaydedileceği klasör
